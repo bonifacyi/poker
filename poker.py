@@ -62,6 +62,11 @@ def hand_rank(hand):
 
 
 def int_rank(r):
+    """
+    Возвращает числовой эквивалент ранга
+    :param str:
+    :return int:
+    """
     if r in LETTERS.keys():
         r = LETTERS[r]
     return int(r)
@@ -109,24 +114,16 @@ def two_pair(ranks):
         return sorted(pair, reverse=True)
 
 
-def best_hand(big_hand):
-    """Из "руки" в 7 карт возвращает лучшую "руку" в 5 карт """
-    best_rank = (0,)
-    b_hand = []
-    for hand in combinations(big_hand, HAND_SIZE):
-        rank = hand_rank(hand)
-        if rank[0] > best_rank[0] or len(best_rank) == 1:
-            best_rank = rank
-            b_hand = hand
-        elif rank[0] == best_rank[0]:
-            for i in range(1, len(rank)):
-                if rank[i] > best_rank[i]:
-                    best_rank = rank
-                    b_hand = hand
-    return b_hand
-
-
 def gen_hands(hand):
+    """
+    Рекурсивно "раскрывает" джокеров.
+    Получает "руку" в виде списка.
+    Возвращает список "рук" (списков) со всеми возможными вариантами,
+    которые могут принимать джокеры.
+    Если джокеров нет, возвращает [hand]
+    :param hand:
+    :return:
+    """
     hands = []
     if '?R' in hand:
         for card in JOKERS['?R']:
@@ -147,6 +144,23 @@ def gen_hands(hand):
     else:
         hands.append(hand)
     return hands
+
+
+def best_hand(big_hand):
+    """Из "руки" в 7 карт возвращает лучшую "руку" в 5 карт """
+    best_rank = (0,)
+    b_hand = []
+    for hand in combinations(big_hand, HAND_SIZE):
+        rank = hand_rank(hand)
+        if rank[0] > best_rank[0] or len(best_rank) == 1:
+            best_rank = rank
+            b_hand = hand
+        elif rank[0] == best_rank[0]:
+            for i in range(1, len(rank)):
+                if rank[i] > best_rank[i]:
+                    best_rank = rank
+                    b_hand = hand
+    return b_hand
 
 
 def best_wild_hand(big_hand):
@@ -199,12 +213,3 @@ def test_best_wild_hand():
 if __name__ == '__main__':
     test_best_hand()
     test_best_wild_hand()
-    # print(sorted(best_hand("TH TS TD TC 5H 5C 7C".split())))
-    # print(sorted(best_wild_hand("TD TC 5H 5C 7C ?R ?B".split())))
-
-    """print(card_ranks(['7C', 'AC', '9C', 'JC', 'TC']))
-    print(flush(['7C', 'AC', '9C', 'JC', 'TC']))
-    print(straight([14, 13, 12, 11, 9]))
-    print(kind(4, [11, 11, 11, 11, 7]))
-    print(two_pair([7, 7, 9, 11, 11]))
-    print(best_hand("TD TC TH 7C 7D 8C TS".split()))"""

@@ -32,6 +32,7 @@ from itertools import combinations, product, chain
 HAND_SIZE = 5
 LETTERS = {'T': 10, 'J': 11, 'Q': 12, 'K': 13, 'A': 14}
 SUITS = ['C', 'S', 'D', 'H']
+# Значения, которые могут принимать джокеры
 JOKERS = {
     '?R': [str(x[0])+x[1] for x in product(chain(range(2, 10), LETTERS.keys()), SUITS[2:])],
     '?B': [str(x[0])+x[1] for x in product(chain(range(2, 10), LETTERS.keys()), SUITS[:2])],
@@ -62,11 +63,7 @@ def hand_rank(hand):
 
 
 def int_rank(r):
-    """
-    Возвращает числовой эквивалент ранга
-    :param str:
-    :return int:
-    """
+    """Возвращает числовой эквивалент ранга"""
     if r in LETTERS.keys():
         r = LETTERS[r]
     return int(r)
@@ -121,8 +118,6 @@ def gen_hands(hand):
     Возвращает список "рук" (списков) со всеми возможными вариантами,
     которые могут принимать джокеры.
     Если джокеров нет, возвращает [hand]
-    :param hand:
-    :return:
     """
     hands = []
     if '?R' in hand:
